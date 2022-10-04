@@ -62,6 +62,9 @@ jobs:
       
       - name: Running tests
         run: docker-compose -f docker-compose.prod.yaml exec -T app_prod npm run test
+      
+      - name: Running tests
+        run: docker-compose -f docker-compose.prod.yaml exec -T app_prod npm run test:e2e
 
   cd:
     needs: ci
