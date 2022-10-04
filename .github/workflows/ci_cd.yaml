@@ -24,12 +24,6 @@ jobs:
 
   ci:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
-      # This is used to complete the identity challenge
-      # with sigstore/fulcio when running outside of PRs.
-      id-token: write
 
     steps:
       - name: Checkout repository
@@ -71,8 +65,14 @@ jobs:
 
   cd:
     needs: ci
-    runs-on: ubuntu-latest
     if: ${{ github.event_name != 'pull_request' }}
+    runs-on: ubuntu-latest
+    permissions:
+       contents: read
+       packages: write
+       # This is used to complete the identity challenge
+       # with sigstore/fulcio when running outside of PRs.
+       id-token: write
 
 
 
@@ -83,7 +83,6 @@ jobs:
        # Install the cosign tool except on PR
        # https://github.com/sigstore/cosign-installer
        - name: Install cosign
-         if: github.event_name != 'pull_request'
          uses: sigstore/cosign-installer@f3c664df7af409cb4873aa5068053ba9d61a57b6 #v2.6.0
          with:
            cosign-release: 'v1.11.0'
@@ -114,7 +113,7 @@ jobs:
          with:
            context: .
            file: ./Dockerfile.prod
-           push: ${{ github.event_name != 'pull_request' }}
+           push: true
            tags: ${{ steps.meta.outputs.tags }}
            labels: ${{ steps.meta.outputs.labels }}
            cache-from: type=gha
