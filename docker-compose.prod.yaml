@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  
+  app_prod:
+    build: 
+      context: .
+      dockerfile: Dockerfile.prod
+      target: ${STAGE:-testing}
+    ports: 
+      - 3000:3000
+    volumes:
+      - .:/home/node/app
+      - /home/node/app/dist
+      - /home/node/app/node_modules
+    depends_on:
+      - db
+  
+  db_prod:
+    image: mongo:6.0.2
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=root
+    # volumes:
+    #   - ./.docker/mongo:/docker-entrypoint-initdb.d
+    tmpfs:
+      - /data/db
+    networks:
+      default:
+        aliases:
+          - db_prod
+          - db_test

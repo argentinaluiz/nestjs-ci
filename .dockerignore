@@ -1,0 +1,10 @@
+.history/
+.docker/dbdata/
+dist/
+node_modules/
+nestjs.tar
+nestjs.tar.gz
+docker-compose.prod.yaml
+docker-compose.yaml
+Dockerfile.dev
+Dockerfile.prod

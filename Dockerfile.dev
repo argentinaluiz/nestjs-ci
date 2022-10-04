@@ -1,0 +1,11 @@
+FROM node:16.16.0-slim
+
+RUN apt update && apt install -y bash libcurl4
+
+RUN npm install -g @nestjs/cli@9.1.4
+
+USER node
+
+WORKDIR /home/node/app
+
+CMD [ ".docker/start.dev.sh" ]

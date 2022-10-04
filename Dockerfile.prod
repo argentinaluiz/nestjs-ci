@@ -1,0 +1,54 @@
+# testing stage
+
+FROM node:16.16.0-slim as testing
+
+RUN apt update && \
+    apt install -y bash libcurl4
+
+USER node
+
+RUN mkdir /home/node/app
+
+WORKDIR /home/node/app
+
+COPY package.json package-lock.json ./
+
+RUN npm ci
+
+COPY . .
+
+RUN npm run build
+
+#CMD ["tail", "-f", "/dev/null"]
+ENV NODE_ENV=prod
+CMD [ "npm", "run", "start:prod" ]
+
+# production stage
+
+FROM node:16.16.0-slim as production
+
+USER node
+
+RUN mkdir /home/node/app
+
+WORKDIR /home/node/app
+
+COPY --from=testing --chown=node:node /home/node/app .
+
+COPY package.json package-lock.json ./
+
+RUN npm ci --omit=dev
+
+EXPOSE 3000
+
+ENV NODE_ENV=prod
+#CMD ["tail", "-f", "/dev/null"]
+CMD [ "npm", "run", "start:prod" ]
+
+
+
+
+
+
+
+
