@@ -57,7 +57,7 @@ jobs:
           target: testing
           load: true
           push: false
-          tags: nestjs-tests_prod
+          tags: ${{ env.IMAGE_NAME }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
       
@@ -68,7 +68,7 @@ jobs:
         run: wget -qO- https://raw.githubusercontent.com/eficode/wait-for/v2.1.3/wait-for | sh -s -- http://localhost:3000 -- echo success
       
       - name: Running tests
-        run: docker-compose -f docker-compose.prod.yaml exec app npm run test
+        run: docker-compose -f docker-compose.prod.yaml exec app_prod npm run test
 
   # build:
 
