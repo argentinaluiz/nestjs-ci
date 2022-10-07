@@ -15,7 +15,8 @@ on:
 
 env:
   # Use docker.io for Docker Hub if empty
-  REGISTRY: ghcr.io
+  #REGISTRY: ghcr.io
+  REGISTRY: gcr.io
   # github.repository as <account>/<repo>
   IMAGE_NAME: ${{ github.repository }}
 
@@ -51,8 +52,10 @@ jobs:
         uses: docker/login-action@28218f9b04b4f3f62068d7b6ce6ca5b26e35336c
         with:
           registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          #username: ${{ github.actor }}
+          username: _json_key
+          #password: ${{ secrets.GITHUB_TOKEN }}
+          password: ${{ secrets.GCP_SA_KEY }}
 
        # Extract metadata (tags, labels) for Docker
        # https://github.com/docker/metadata-action
@@ -84,6 +87,20 @@ jobs:
       - name: Running tests
         run: docker-compose -f docker-compose.prod.yaml exec -T app_prod sh -c "NODE_ENV=test npm run test:unit && npm run test:int && npm run test:e2e"
       
+      # - name: Build production app and push
+      #   id: build-and-push
+      #   if: ${{ github.event_name != 'pull_request' }}
+      #   uses: docker/build-push-action@ac9327eae2b366085ac7f6a2d02df8aa8ead720a
+      #   with:
+      #     context: .
+      #     file: ./Dockerfile.prod
+      #     target: production
+      #     push: true
+      #     tags: ${{ steps.meta.outputs.tags }}
+      #     labels: ${{ steps.meta.outputs.labels }}
+      #     cache-from: type=gha
+      #     cache-to: type=gha,mode=max
+      
       - name: Build production app and push
         id: build-and-push
         if: ${{ github.event_name != 'pull_request' }}
@@ -109,12 +126,6 @@ jobs:
     needs: ci
     if: ${{ github.event_name != 'pull_request' }}
     runs-on: ubuntu-latest
-    permissions:
-       contents: read
-       packages: write
-       # This is used to complete the identity challenge
-       # with sigstore/fulcio when running outside of PRs.
-       id-token: write
 
 
 
