@@ -1,5 +1,6 @@
 .history/
 .docker/dbdata/
+.git
 .github/
 dist/
 node_modules/
