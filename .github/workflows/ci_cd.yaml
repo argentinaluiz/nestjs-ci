@@ -67,27 +67,27 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
 
-      - name: Build testing app
-        id: build-testing-app
-        uses: docker/build-push-action@ac9327eae2b366085ac7f6a2d02df8aa8ead720a
-        with:
-          context: .
-          file: ./Dockerfile.prod
-          target: testing
-          load: true
-          push: false
-          tags: ${{ steps.meta.outputs.tags }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+      # - name: Build testing app
+      #   id: build-testing-app
+      #   uses: docker/build-push-action@ac9327eae2b366085ac7f6a2d02df8aa8ead720a
+      #   with:
+      #     context: .
+      #     file: ./Dockerfile.prod
+      #     target: testing
+      #     load: true
+      #     push: false
+      #     tags: ${{ steps.meta.outputs.tags }}
+      #     cache-from: type=gha
+      #     cache-to: type=gha,mode=max
       
-      - name: Up containers
-        run: docker compose -f docker-compose.prod.yaml up -d
+      # - name: Up containers
+      #   run: docker compose -f docker-compose.prod.yaml up -d
       
-      - name: Waiting environment to be ready
-        run: wget -qO- https://raw.githubusercontent.com/eficode/wait-for/v2.1.3/wait-for | sh -s -- http://localhost:3000 -- echo success
+      # - name: Waiting environment to be ready
+      #   run: wget -qO- https://raw.githubusercontent.com/eficode/wait-for/v2.1.3/wait-for | sh -s -- http://localhost:3000 -- echo success
       
-      - name: Running tests
-        run: docker-compose -f docker-compose.prod.yaml exec -T app_prod sh -c "NODE_ENV=test npm run test:unit && npm run test:int && npm run test:e2e"
+      # - name: Running tests
+      #   run: docker-compose -f docker-compose.prod.yaml exec -T app_prod sh -c "NODE_ENV=test npm run test:unit && npm run test:int && npm run test:e2e"
       
       # - name: Build production app and push
       #   id: build-and-push
@@ -112,7 +112,8 @@ jobs:
           file: ./Dockerfile.prod
           target: production
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
+          #tags: ${{ steps.meta.outputs.tags }}
+          tags: us-docker.pkg.dev/nestjs-live-test/gcr.io:main
           #labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
