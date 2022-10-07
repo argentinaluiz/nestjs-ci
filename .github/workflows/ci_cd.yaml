@@ -21,7 +21,9 @@ env:
   # github.repository as <account>/<repo>
   #IMAGE_NAME: ${{ github.repository }}
   IMAGE_NAME: nestjs-live-test/gcr.io/nest
-
+  PROJECT_ID: nestjs-live-test
+  REGION: us-central1
+  SERVICE: 'nest'
 
 jobs:
 
@@ -133,8 +135,16 @@ jobs:
 
 
     steps:
-       - name: Checkout repository
-         uses: actions/checkout@v3
+      #  - name: Checkout repository
+      #    uses: actions/checkout@v3
+
+       - name: 'Deploy to Cloud Run'
+         uses: 'google-github-actions/deploy-cloudrun@v0'
+         with:
+          service: ${{ env.SERVICE }}
+          image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          region: ${{ env.REGION }}
+          env_vars: NAME=${{ secrets.MONGO_DSN }}
         
       #  # Install the cosign tool except on PR
       #  # https://github.com/sigstore/cosign-installer
