@@ -131,7 +131,7 @@ jobs:
 
   cd:
     needs: ci
-    if: ${{ github.event_name != 'pull_request' }}
+    if: ${{ github.event_name != 'pull_request' }} && ${{ github.ref_type == 'branch' }}
     runs-on: ubuntu-latest
 
 
@@ -150,7 +150,8 @@ jobs:
          uses: 'google-github-actions/deploy-cloudrun@v0'
          with:
           service: ${{ env.SERVICE }}
-          image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          #image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          image: ${{needs.ci.steps.meta.outputs.tags }}
           region: ${{ env.REGION }}
           env_vars: MONGO_DSN=${{ secrets.MONGO_DSN }}
         
