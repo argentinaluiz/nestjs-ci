@@ -153,7 +153,7 @@ jobs:
          with:
           service: ${{ env.SERVICE }}
           #image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          image: ${{ steps.ci.outputs.tags }}
+          image: ${{ needs.ci.outputs.tags }}
           region: ${{ env.REGION }}
           env_vars: MONGO_DSN=${{ secrets.MONGO_DSN }}
         
