@@ -20,7 +20,7 @@ env:
   REGISTRY: us-docker.pkg.dev
   # github.repository as <account>/<repo>
   #IMAGE_NAME: ${{ github.repository }}
-  IMAGE_NAME: nestjs-live-test/gcr.io
+  IMAGE_NAME: nestjs-live-test/gcr.io/nest
 
 
 jobs:
