@@ -1,5 +1,6 @@
 .history/
 .docker/dbdata/
+.github/
 dist/
 node_modules/
 nestjs.tar
