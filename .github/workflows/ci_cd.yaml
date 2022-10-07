@@ -113,7 +113,7 @@ jobs:
           target: production
           push: true
           #tags: ${{ steps.meta.outputs.tags }}
-          tags: us-docker.pkg.dev/nestjs-live-test/gcr.io:main
+          tags: us-docker.pkg.dev/nestjs-live-test/gcr.io/nest:main
           #labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
